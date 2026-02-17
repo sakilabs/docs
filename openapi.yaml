@@ -4,7 +4,7 @@ info:
   description: API documentation for OpenBTS server
   version: 1.0.0
 servers:
-  - url: https://sakilabs.openbts.com/api/v1
+  - url: /api/v1
     description: Main API version
 
 components:
@@ -546,7 +546,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProposedCellInsert'
-      required: []
 
     UpdateSubmissionRequest:
       type: object
