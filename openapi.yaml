@@ -281,7 +281,7 @@ components:
           type: integer
         station_id:
           type: integer
-          message: "Must be provided on /cells endpoint and submissions if target_cell_id is not provided"
+          description: "Must be provided on /cells endpoint and submissions if target_cell_id is not provided"
         rat:
           type: string
           enum: [GSM, UMTS, LTE, NR]
@@ -2350,3 +2350,4 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
