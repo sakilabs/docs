@@ -4,7 +4,7 @@ info:
   description: API documentation for OpenBTS server
   version: 1.0.0
 servers:
-  - url: /api/v1
+  - url: https://openbts.sakilabs.com/api/v1
     description: Main API version
 
 components:
@@ -101,25 +101,6 @@ components:
         region:
           $ref: '#/components/schemas/Region'
       required: [id, latitude, longitude, region_id]
-
-    UkeLocation:
-      type: object
-      properties:
-        id:
-          type: integer
-        latitude:
-          type: number
-          format: double
-        longitude:
-          type: number
-          format: double
-        address:
-          type: string
-          nullable: true
-        city:
-          type: string
-          nullable: true
-      required: [id, latitude, longitude]
 
     CellDetails:
       type: object
