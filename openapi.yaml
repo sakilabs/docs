@@ -4,7 +4,7 @@ info:
   description: API documentation for OpenBTS server
   version: 1.0.0
 servers:
-  - url: https://openbts.sakilabs.com/api/v1
+  - url: /api/v1
     description: Main API version
 
 components:
@@ -99,17 +99,16 @@ components:
         region_id:
           type: integer
         region:
-          $ref: '#/components/schemas/Region'
+          $ref: "#/components/schemas/Region"
       required: [id, latitude, longitude, region_id]
 
     CellDetails:
-      type: object
       description: RAT-specific details (GSM, UMTS, LTE, NR)
       oneOf:
-        - $ref: '#/components/schemas/GSMDetails'
-        - $ref: '#/components/schemas/UMTSDetails'
-        - $ref: '#/components/schemas/LTEDetails'
-        - $ref: '#/components/schemas/NRDetails'
+        - $ref: "#/components/schemas/GSMDetails"
+        - $ref: "#/components/schemas/UMTSDetails"
+        - $ref: "#/components/schemas/LTEDetails"
+        - $ref: "#/components/schemas/NRDetails"
 
     GSMDetails:
       type: object
@@ -192,9 +191,9 @@ components:
           type: string
           enum: [GSM, UMTS, LTE, NR]
         band:
-          $ref: '#/components/schemas/Band'
+          $ref: "#/components/schemas/Band"
         details:
-          $ref: '#/components/schemas/CellDetails'
+          $ref: "#/components/schemas/CellDetails"
       required: [id, station_id, band_id, rat]
 
     Station:
@@ -214,20 +213,20 @@ components:
           type: string
           nullable: true
         location:
-          $ref: '#/components/schemas/Location'
+          $ref: "#/components/schemas/Location"
         operator:
-          $ref: '#/components/schemas/Operator'
+          $ref: "#/components/schemas/Operator"
       required: [id, location_id, operator_id]
 
     StationWithCells:
       allOf:
-        - $ref: '#/components/schemas/Station'
+        - $ref: "#/components/schemas/Station"
         - type: object
           properties:
             cells:
               type: array
               items:
-                $ref: '#/components/schemas/Cell'
+                $ref: "#/components/schemas/Cell"
 
     StationListResponse:
       type: object
@@ -235,7 +234,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/StationWithCells'
+            $ref: "#/components/schemas/StationWithCells"
         totalCount:
           type: integer
       required: [data, totalCount]
@@ -253,11 +252,11 @@ components:
           type: string
           format: date-time
         band:
-          $ref: '#/components/schemas/Band'
+          $ref: "#/components/schemas/Band"
         operator:
-          $ref: '#/components/schemas/Operator'
+          $ref: "#/components/schemas/Operator"
         location:
-          $ref: '#/components/schemas/Location'
+          $ref: "#/components/schemas/Location"
       required: [id, number]
 
     RadioLineManufacturer:
@@ -277,7 +276,7 @@ components:
         name:
           type: string
         manufacturer:
-          $ref: '#/components/schemas/RadioLineManufacturer'
+          $ref: "#/components/schemas/RadioLineManufacturer"
       required: [id, name]
 
     RadioLineTx:
@@ -301,12 +300,12 @@ components:
           type: object
           properties:
             type:
-              $ref: '#/components/schemas/RadioLineEquipmentType'
+              $ref: "#/components/schemas/RadioLineEquipmentType"
         antenna:
           type: object
           properties:
             type:
-              $ref: '#/components/schemas/RadioLineEquipmentType'
+              $ref: "#/components/schemas/RadioLineEquipmentType"
             gain:
               type: number
               nullable: true
@@ -327,7 +326,7 @@ components:
         height:
           type: number
         type:
-          $ref: '#/components/schemas/RadioLineEquipmentType'
+          $ref: "#/components/schemas/RadioLineEquipmentType"
         gain:
           type: number
           nullable: true
@@ -387,15 +386,15 @@ components:
         id:
           type: integer
         tx:
-          $ref: '#/components/schemas/RadioLineTx'
+          $ref: "#/components/schemas/RadioLineTx"
         rx:
-          $ref: '#/components/schemas/RadioLineRx'
+          $ref: "#/components/schemas/RadioLineRx"
         link:
-          $ref: '#/components/schemas/RadioLineLink'
+          $ref: "#/components/schemas/RadioLineLink"
         operator:
-          $ref: '#/components/schemas/Operator'
+          $ref: "#/components/schemas/Operator"
         permit:
-          $ref: '#/components/schemas/RadioLinePermit'
+          $ref: "#/components/schemas/RadioLinePermit"
         updatedAt:
           type: string
           format: date-time
@@ -441,7 +440,7 @@ components:
           type: string
           enum: [added, updated, removed]
         details:
-          $ref: '#/components/schemas/CellDetails'
+          $ref: "#/components/schemas/CellDetails"
 
     ProposedStationInsert:
       type: object
@@ -488,23 +487,23 @@ components:
           type: string
           enum: [new, update, delete]
         station:
-          $ref: '#/components/schemas/Station'
+          $ref: "#/components/schemas/Station"
         submitter:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         reviewer:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         cells:
           type: array
           items:
-            $ref: '#/components/schemas/Cell'
+            $ref: "#/components/schemas/Cell"
       required: [id, status, type, submitter]
 
     CreateSubmissionRequest:
       oneOf:
-        - $ref: '#/components/schemas/SingleSubmission'
+        - $ref: "#/components/schemas/SingleSubmission"
         - type: array
           items:
-            $ref: '#/components/schemas/SingleSubmission'
+            $ref: "#/components/schemas/SingleSubmission"
           minItems: 1
           maxItems: 10
 
@@ -520,13 +519,13 @@ components:
         submitter_note:
           type: string
         station:
-          $ref: '#/components/schemas/ProposedStationInsert'
+          $ref: "#/components/schemas/ProposedStationInsert"
         location:
-          $ref: '#/components/schemas/ProposedLocationInsert'
+          $ref: "#/components/schemas/ProposedLocationInsert"
         cells:
           type: array
           items:
-            $ref: '#/components/schemas/ProposedCellInsert'
+            $ref: "#/components/schemas/ProposedCellInsert"
 
     UpdateSubmissionRequest:
       type: object
@@ -536,13 +535,13 @@ components:
         submitter_note:
           type: string
         station:
-          $ref: '#/components/schemas/ProposedStationInsert'
+          $ref: "#/components/schemas/ProposedStationInsert"
         location:
-          $ref: '#/components/schemas/ProposedLocationInsert'
+          $ref: "#/components/schemas/ProposedLocationInsert"
         cells:
           type: array
           items:
-            $ref: '#/components/schemas/ProposedCellInsert'
+            $ref: "#/components/schemas/ProposedCellInsert"
 
 paths:
   /auth/*:
@@ -556,33 +555,33 @@ paths:
               type: object
               additionalProperties: true
       responses:
-        '200':
+        "200":
           description: Successful authentication operation
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Authentication failed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /bands:
     get:
       summary: List all bands
       tags: [Bands]
       responses:
-        '200':
+        "200":
           description: List of bands
           content:
             application/json:
@@ -592,13 +591,13 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Band'
-        '500':
+                      $ref: "#/components/schemas/Band"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     post:
       summary: Create a new band
       tags: [Bands]
@@ -620,7 +619,7 @@ paths:
                   enum: [GSM, UMTS, LTE, NR]
               required: [name, frequency, rat]
       responses:
-        '200':
+        "200":
           description: Band created successfully
           content:
             application/json:
@@ -628,11 +627,19 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Band'
-        '400':
-          $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          $ref: '#/components/schemas/ErrorResponse'
+                    $ref: "#/components/schemas/Band"
+        "400":
+          description: Bad Request (Validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /bands/{id}:
     parameters:
@@ -645,7 +652,7 @@ paths:
       summary: Get band details
       tags: [Bands]
       responses:
-        '200':
+        "200":
           description: Band details
           content:
             application/json:
@@ -653,37 +660,45 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Band'
-        '404':
-          $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          $ref: '#/components/schemas/ErrorResponse'
+                    $ref: "#/components/schemas/Band"
+        "404":
+          description: Band not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete a band
       tags: [Bands]
       security:
         - webLogin: []
       responses:
-        '204':
+        "204":
           description: Band deleted
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Band Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /stations:
     get:
@@ -741,16 +756,24 @@ paths:
             type: string
             enum: [station_id, updatedAt, createdAt]
       responses:
-        '200':
+        "200":
           description: List of stations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StationListResponse'
-        '400':
-          $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/StationListResponse"
+        "400":
+          description: Bad Request (Validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     post:
       summary: Create a new station
       tags: [Stations]
@@ -763,20 +786,20 @@ paths:
             schema:
               type: object
               allOf:
-                - $ref: '#/components/schemas/Station'
+                - $ref: "#/components/schemas/Station"
                 - type: object
                   properties:
                     cells:
                       type: array
                       items:
                         allOf:
-                          - $ref: '#/components/schemas/Cell'
+                          - $ref: "#/components/schemas/Cell"
                           - type: object
                             properties:
                               details:
-                                $ref: '#/components/schemas/CellDetails'
+                                $ref: "#/components/schemas/CellDetails"
       responses:
-        '200':
+        "200":
           description: Station created
           content:
             application/json:
@@ -784,19 +807,19 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/StationWithCells'
-        '400':
+                    $ref: "#/components/schemas/StationWithCells"
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to create
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /stations/{id}:
     parameters:
@@ -809,7 +832,7 @@ paths:
       summary: Get station details
       tags: [Stations]
       responses:
-        '200':
+        "200":
           description: Station details
           content:
             application/json:
@@ -817,51 +840,51 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/StationWithCells'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/StationWithCells"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Station not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete a station
       tags: [Stations]
       security:
         - webLogin: []
       responses:
-        '204':
+        "204":
           description: Station deleted
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Station not found
           content:
-             application/json:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /stations/{station_id}/cells:
     parameters:
@@ -874,7 +897,7 @@ paths:
       summary: List cells for a station
       tags: [Stations, Cells]
       responses:
-        '200':
+        "200":
           description: List of cells
           content:
             application/json:
@@ -884,11 +907,19 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Cell'
-        '404':
-          $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          $ref: '#/components/schemas/ErrorResponse'
+                      $ref: "#/components/schemas/Cell"
+        "404":
+          description: Cells not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     post:
       summary: Bulk create cells for a station
       tags: [Stations, Cells]
@@ -906,13 +937,13 @@ paths:
                   type: array
                   items:
                     allOf:
-                      - $ref: '#/components/schemas/Cell'
+                      - $ref: "#/components/schemas/Cell"
                       - type: object
                         properties:
                           details:
-                            $ref: '#/components/schemas/CellDetails'
+                            $ref: "#/components/schemas/CellDetails"
       responses:
-        '200':
+        "200":
           description: Cells created
           content:
             application/json:
@@ -922,19 +953,19 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Cell'
-        '400':
+                      $ref: "#/components/schemas/Cell"
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to create
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /stations/{station_id}/cells/{cell_id}:
     parameters:
@@ -952,7 +983,7 @@ paths:
       summary: Get a specific cell from a station
       tags: [Stations, Cells]
       responses:
-        '200':
+        "200":
           description: Cell details
           content:
             application/json:
@@ -960,25 +991,25 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Cell'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/Cell"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cell not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     patch:
       summary: Update a cell
       tags: [Stations, Cells]
@@ -990,13 +1021,13 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/Cell'
+                - $ref: "#/components/schemas/Cell"
                 - type: object
                   properties:
                     details:
-                      $ref: '#/components/schemas/CellDetails'
+                      $ref: "#/components/schemas/CellDetails"
       responses:
-        '200':
+        "200":
           description: Cell updated
           content:
             application/json:
@@ -1004,51 +1035,51 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Cell'
-        '400':
+                    $ref: "#/components/schemas/Cell"
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cell not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to update
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete a cell
       tags: [Stations, Cells]
       security:
         - webLogin: []
       responses:
-        '204':
+        "204":
           description: Cell deleted
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cell not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /stations/{station_id}/permits:
     parameters:
@@ -1061,7 +1092,7 @@ paths:
       summary: List UKE permits for a station
       tags: [Stations, Permits]
       responses:
-        '200':
+        "200":
           description: List of permits
           content:
             application/json:
@@ -1071,25 +1102,25 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/UkePermit'
-        '400':
-          description: Bad Request (Invalid ID)
+                      $ref: "#/components/schemas/UkePermit"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Station not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /stations/{station_id}/comments:
     parameters:
@@ -1102,7 +1133,7 @@ paths:
       summary: Get comments for a station
       tags: [Stations]
       responses:
-        '200':
+        "200":
           description: List of comments
           content:
             application/json:
@@ -1120,24 +1151,24 @@ paths:
                           type: string
                         author:
                           type: object
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Station not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /cells:
     get:
@@ -1155,7 +1186,7 @@ paths:
             type: integer
             default: 1
       responses:
-        '200':
+        "200":
           description: List of cells
           content:
             application/json:
@@ -1165,19 +1196,19 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Cell'
-        '400':
+                      $ref: "#/components/schemas/Cell"
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /cells/{id}:
     parameters:
@@ -1190,7 +1221,7 @@ paths:
       summary: Get cell details
       tags: [Cells]
       responses:
-        '200':
+        "200":
           description: Cell details
           content:
             application/json:
@@ -1198,58 +1229,58 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Cell'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/Cell"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cell not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete a cell
       tags: [Cells]
       security:
         - webLogin: []
       responses:
-        '204':
+        "204":
           description: Cell deleted
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cell not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /regions:
     get:
       summary: List regions
       tags: [Regions]
       responses:
-        '200':
+        "200":
           description: List of regions
           content:
             application/json:
@@ -1259,13 +1290,13 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Region'
-        '500':
+                      $ref: "#/components/schemas/Region"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /regions/{id}:
     parameters:
@@ -1278,7 +1309,7 @@ paths:
       summary: Get region details
       tags: [Regions]
       responses:
-        '200':
+        "200":
           description: Region details
           content:
             application/json:
@@ -1286,58 +1317,58 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Region'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/Region"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Region not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete a region
       tags: [Regions]
       security:
         - webLogin: []
       responses:
-        '204':
+        "204":
           description: Region deleted
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Region not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /operators:
     get:
       summary: List operators
       tags: [Operators]
       responses:
-        '200':
+        "200":
           description: List of operators
           content:
             application/json:
@@ -1347,13 +1378,13 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Operator'
-        '500':
+                      $ref: "#/components/schemas/Operator"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /operators/{id}:
     parameters:
@@ -1366,7 +1397,7 @@ paths:
       summary: Get operator details
       tags: [Operators]
       responses:
-        '200':
+        "200":
           description: Operator details
           content:
             application/json:
@@ -1374,51 +1405,51 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Operator'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/Operator"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Operator not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete an operator
       tags: [Operators]
       security:
         - webLogin: []
       responses:
-        '204':
+        "204":
           description: Operator deleted
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Operator not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /locations:
     get:
@@ -1444,7 +1475,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: List of locations
           content:
             application/json:
@@ -1454,21 +1485,21 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Location'
+                      $ref: "#/components/schemas/Location"
                   totalCount:
                     type: integer
-        '400':
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /locations/{id}:
     parameters:
@@ -1481,7 +1512,7 @@ paths:
       summary: Get location details
       tags: [Locations]
       responses:
-        '200':
+        "200":
           description: Location details
           content:
             application/json:
@@ -1489,51 +1520,51 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Location'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/Location"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Location not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete a location
       tags: [Locations]
       security:
         - webLogin: []
       responses:
-        '204':
+        "204":
           description: Location deleted
-        '400':
-          description: Bad Request (Invalid ID)
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Location not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /uke/radiolines:
     get:
@@ -1555,7 +1586,7 @@ paths:
             type: integer
             default: 1
       responses:
-        '200':
+        "200":
           description: List of radiolines
           content:
             application/json:
@@ -1565,21 +1596,21 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/RadioLine'
+                      $ref: "#/components/schemas/RadioLine"
                   totalCount:
                     type: integer
-        '400':
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /uke/radiolines/{id}:
     parameters:
@@ -1592,7 +1623,7 @@ paths:
       summary: Get radioline details
       tags: [UKE]
       responses:
-        '200':
+        "200":
           description: Radioline details
           content:
             application/json:
@@ -1600,25 +1631,25 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/RadioLine'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/RadioLine"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Radioline not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /uke/permits:
     get:
@@ -1635,7 +1666,7 @@ paths:
             type: integer
             default: 150
       responses:
-        '200':
+        "200":
           description: List of permits
           content:
             application/json:
@@ -1645,19 +1676,19 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/UkePermit'
-        '400':
+                      $ref: "#/components/schemas/UkePermit"
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /uke/permits/{id}:
     parameters:
@@ -1670,7 +1701,7 @@ paths:
       summary: Get permit details
       tags: [UKE, Permits]
       responses:
-        '200':
+        "200":
           description: Permit details
           content:
             application/json:
@@ -1678,25 +1709,25 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/UkePermit'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/UkePermit"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Permit not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /search:
     post:
@@ -1720,7 +1751,7 @@ paths:
                   minLength: 1
               required: [query]
       responses:
-        '200':
+        "200":
           description: Search results
           content:
             application/json:
@@ -1730,19 +1761,19 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Station'
-        '400':
+                      $ref: "#/components/schemas/Station"
+        "400":
           description: Bad Request (Validation Error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /submissions:
     get:
@@ -1773,7 +1804,7 @@ paths:
             type: string
             enum: [new, update, delete]
       responses:
-        '200':
+        "200":
           description: List of submissions
           content:
             application/json:
@@ -1783,33 +1814,33 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Submission'
+                      $ref: "#/components/schemas/Submission"
                   totalCount:
                     type: integer
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     post:
       summary: Create a submission
       tags: [Submissions]
@@ -1821,9 +1852,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSubmissionRequest'
+              $ref: "#/components/schemas/CreateSubmissionRequest"
       responses:
-        '200':
+        "200":
           description: Submission created
           content:
             application/json:
@@ -1833,25 +1864,25 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Submission'
-        '400':
+                      $ref: "#/components/schemas/Submission"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to create submission
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /submissions/{id}:
     parameters:
@@ -1868,7 +1899,7 @@ paths:
         - webLogin: []
         - apiKey: []
       responses:
-        '200':
+        "200":
           description: Submission details
           content:
             application/json:
@@ -1876,25 +1907,25 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Submission'
-        '400':
-          description: Bad Request (Invalid ID)
+                    $ref: "#/components/schemas/Submission"
+        "400":
+          description: Bad Request (Validation error)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Submission not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     patch:
       summary: Update a submission
       tags: [Submissions]
@@ -1906,9 +1937,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateSubmissionRequest'
+              $ref: "#/components/schemas/UpdateSubmissionRequest"
       responses:
-        '200':
+        "200":
           description: Submission updated
           content:
             application/json:
@@ -1916,37 +1947,37 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Submission'
-        '400':
+                    $ref: "#/components/schemas/Submission"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Submission not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to update submission
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: Delete a submission
       tags: [Submissions]
@@ -1954,39 +1985,39 @@ paths:
         - webLogin: []
         - apiKey: []
       responses:
-        '204':
+        "204":
           description: Submission deleted
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Submission not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Failed to delete submission
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /stats:
     get:
       summary: Get system statistics
       tags: [System]
       responses:
-        '200':
+        "200":
           description: System stats
           content:
             application/json:
@@ -2000,19 +2031,19 @@ paths:
                         type: object
                       counts:
                         type: object
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /settings:
     get:
       summary: Get public settings
       tags: [System]
       responses:
-        '200':
+        "200":
           description: Public settings
           content:
             application/json:
@@ -2026,19 +2057,19 @@ paths:
                         type: boolean
                       submissionsEnabled:
                         type: boolean
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /health:
     get:
       summary: Health check
       tags: [System]
       responses:
-        '200':
+        "200":
           description: Service healthy
           content:
             application/json:
@@ -2054,9 +2085,9 @@ paths:
                       timestamp:
                         type: string
                         format: date-time
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
