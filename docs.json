@@ -9,10 +9,10 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-  "tabs": [
+    "tabs": [
       {
         "tab": "API Reference",
-        "openapi": "openapi.yaml"
+        "openapi": "./openapi.yaml"
       }
     ]
   },
