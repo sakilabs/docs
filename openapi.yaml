@@ -59,6 +59,8 @@ components:
           type: string
         short_name:
           type: string
+        parent_id:
+          type: integer
       required: [id, mnc, name]
 
     Region:
@@ -89,10 +91,29 @@ components:
         city:
           type: string
           nullable: true
-        region_id:
-          type: integer
         region:
           $ref: "#/components/schemas/Region"
+      required: [id, latitude, longitude, region_id]
+
+    LocationToInsert:
+      type: object
+      properties:
+        id:
+          type: integer
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        address:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        region_id:
+          type: integer
       required: [id, latitude, longitude, region_id]
 
     CellDetails:
@@ -102,6 +123,14 @@ components:
         - $ref: "#/components/schemas/UMTSDetails"
         - $ref: "#/components/schemas/LTEDetails"
         - $ref: "#/components/schemas/NRDetails"
+
+    CellDetailsToInsert:
+      description: RAT-specific details for cell creation (GSM, UMTS, LTE, NR)
+      oneOf:
+        - $ref: "#/components/schemas/GSMDetailsToInsert"
+        - $ref: "#/components/schemas/UMTSDetailsToInsert"
+        - $ref: "#/components/schemas/LTEDetailsToInsert"
+        - $ref: "#/components/schemas/NRDetailsToInsert"
 
     GSMDetails:
       type: object
@@ -171,6 +200,62 @@ components:
         supports_nr_redcap:
           type: boolean
 
+    GSMDetailsToInsert:
+      type: object
+      properties:
+        cid:
+          type: integer
+        lac:
+          type: integer
+        e_gsm:
+          type: boolean
+
+    UMTSDetailsToInsert:
+      type: object
+      properties:
+        cid:
+          type: integer
+        lac:
+          type: integer
+          nullable: true
+        carier:
+          type: integer
+          nullable: true
+        rnc:
+          type: integer
+
+    LTEDetailsToInsert:
+      type: object
+      properties:
+        clid:
+          type: integer
+        tac:
+          type: integer
+          nullable: true
+        enbid:
+          type: integer
+          nullable: true
+        supports_nb_iot:
+          type: boolean
+
+    NRDetailsToInsert:
+      type: object
+      properties:
+        clid:
+          type: integer
+          nullable: true
+        nrtac:
+          type: integer
+          nullable: true
+        pci:
+          type: integer
+          nullable: true
+        gnbid:
+          type: integer
+          nullable: true
+        supports_nr_redcap:
+          type: boolean
+
     Cell:
       type: object
       properties:
@@ -188,6 +273,21 @@ components:
         details:
           $ref: "#/components/schemas/CellDetails"
       required: [id, station_id, band_id, rat]
+
+    CellToInsert:
+      type: object
+      properties:
+        band_id:
+          type: integer
+        station_id:
+          type: integer
+          message: "Must be provided on /cells endpoint and submissions if target_cell_id is not provided"
+        rat:
+          type: string
+          enum: [GSM, UMTS, LTE, NR]
+        details:
+          $ref: "#/components/schemas/CellDetailsToInsert"
+      required: [band_id, rat]
 
     Station:
       type: object
@@ -488,7 +588,7 @@ components:
         cells:
           type: array
           items:
-            $ref: "#/components/schemas/Cell"
+            $ref: "#/components/schemas/ProposedCellInsert"
       required: [id, status, type, submitter]
 
     CreateSubmissionRequest:
@@ -926,7 +1026,7 @@ paths:
                   type: array
                   items:
                     allOf:
-                      - $ref: "#/components/schemas/Cell"
+                      - $ref: "#/components/schemas/CellToInsert"
       responses:
         "200":
           description: Cells created
@@ -1190,6 +1290,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create a new cell
+      tags: [Cells]
+      security:
+        - webLogin: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/CellToInsert"
+      responses:
+        "200":
+          description: Cell created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Cell"
+        "400":
+          description: Bad Request (e.g. Validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /cells/{id}:
     parameters:
@@ -1225,6 +1359,46 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Add a new cell
+      tags: [Cells]
+      security:
+        - webLogin: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/CellToInsert"
+      responses:
+        "200":
+          description: Cell updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Cell"
+        "400":
+          description: Bad Request (e.g. Validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Cell not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Failed to update
           content:
             application/json:
               schema:
@@ -1272,6 +1446,45 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Region"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create a new region
+      tags: [Regions]
+      security:
+        - webLogin: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                code:
+                  type: string
+              required: [name, code]
+      responses:
+        "200":
+          description: Region created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Region"
+        "400":
+          description: Bad Request (e.g. Validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "500":
           description: Internal Server Error
           content:
@@ -1366,6 +1579,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create a new operator
+      tags: [Operators]
+      security:
+        - webLogin: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                full_name:
+                  type: string
+                parent_id:
+                  type: integer
+                mnc:
+                  type: string
+              required: [name, full_name, mnc, parent_id]
+      responses:
+        "200":
+          description: Operator created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Operator"
 
   /operators/{id}:
     parameters:
@@ -1469,6 +1713,40 @@ paths:
                       $ref: "#/components/schemas/Location"
                   totalCount:
                     type: integer
+        "400":
+          description: Bad Request (e.g. Validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create a new location
+      tags: [Locations]
+      security:
+        - webLogin: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/LocationToInsert"
+      responses:
+        "200":
+          description: Location created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/LocationToInsert"
         "400":
           description: Bad Request (e.g. Validation error)
           content:
