@@ -12,7 +12,7 @@
     "tabs": [
       {
         "tab": "API Reference",
-        "openapi": "./openapi.yaml"
+        "openapi": "openapi.json"
       }
     ]
   },
