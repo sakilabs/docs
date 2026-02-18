@@ -95,6 +95,16 @@ components:
           $ref: "#/components/schemas/Region"
       required: [id, latitude, longitude, region]
 
+    LocationWithStations:
+      allOf:
+        - $ref: "#/components/schemas/Location"
+        - type: object
+          properties:
+            stations:
+              type: array
+              items:
+                $ref: "#/components/schemas/StationAtLocation"
+
     LocationToInsert:
       type: object
       properties:
@@ -300,9 +310,6 @@ components:
       properties:
         id:
           type: integer
-        name:
-          type: string
-          nullable: true
         location_id:
           type: integer
         operator_id:
@@ -314,7 +321,42 @@ components:
           $ref: "#/components/schemas/Location"
         operator:
           $ref: "#/components/schemas/Operator"
+        is_confirmed:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
       required: [id, location_id, operator_id]
+
+    StationAtLocation:
+      type: object
+      description: Station as embedded under a Location, with operator object but no nested location.
+      properties:
+        id:
+          type: integer
+        station_id:
+          type: string
+        location_id:
+          type: integer
+        operator_id:
+          type: integer
+        notes:
+          type: string
+          nullable: true
+        is_confirmed:
+          type: boolean
+        operator:
+          $ref: "#/components/schemas/Operator"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id]
 
     StationFlat:
       type: object
@@ -324,19 +366,15 @@ components:
           type: integer
         station_id:
           type: string
-          nullable: true
-        name:
-          type: string
-          nullable: true
         location_id:
           type: integer
-          nullable: true
         operator_id:
           type: integer
-          nullable: true
-        status:
+        notes:
           type: string
           nullable: true
+        is_confirmed:
+          type: boolean
         updatedAt:
           type: string
           format: date-time
@@ -1933,7 +1971,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Location"
+                      $ref: "#/components/schemas/LocationWithStations"
                   totalCount:
                     type: integer
         "400":
