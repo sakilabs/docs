@@ -316,6 +316,68 @@ components:
           $ref: "#/components/schemas/Operator"
       required: [id, location_id, operator_id]
 
+    StationFlat:
+      type: object
+      description: Station as returned inside a Submission (no nested location/operator)
+      properties:
+        id:
+          type: integer
+        station_id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        location_id:
+          type: integer
+          nullable: true
+        operator_id:
+          type: integer
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+        createdAt:
+         type: string
+         format: date-time
+      required: [id, updatedAt, createdAt]
+
+    ProposedLocationRow:
+      type: object
+      description: Full proposed_locations DB row as returned inside a Submission
+      properties:
+        id:
+          type: integer
+        submission_id:
+          type: string
+          format: uuid
+          nullable: true
+        region_id:
+          type: integer
+        city:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        longitude:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+        updatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, region_id, latitude, longitude, updatedAt, createdAt]
+
+
     StationWithCells:
       allOf:
         - $ref: "#/components/schemas/Station"
@@ -713,7 +775,7 @@ components:
           type: string
           format: date-time
         station:
-          $ref: "#/components/schemas/Station"
+          $ref: "#/components/schemas/StationFlat"
           nullable: true
         submitter:
           $ref: "#/components/schemas/User"
@@ -723,20 +785,31 @@ components:
         proposedStation:
           $ref: "#/components/schemas/ProposedStation"
           nullable: true
+        proposedLocation:
+          $ref: "#/components/schemas/ProposedLocationRow"
+          nullable: true
         cells:
           type: array
           items:
             $ref: "#/components/schemas/ProposedCellWithDetails"
       required: [id, submitter_id, status, type, createdAt, updatedAt, submitter, cells]
 
+
     SubmissionCreated:
       allOf:
         - $ref: "#/components/schemas/Submission"
         - type: object
+          description: >
+            Returned by POST /submissions. cells and proposedLocation reflect the
+            input shapes echoed back (no id/timestamps on nested objects).
           properties:
             proposedLocation:
               $ref: "#/components/schemas/ProposedLocationInsert"
               nullable: true
+            cells:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProposedCellInsert"
 
     CreateSubmissionRequest:
       oneOf:
